@@ -1,0 +1,6 @@
+node_modules
+
+yarn.lock
+
+# Environment varibales
+.env*

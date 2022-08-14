@@ -1,0 +1,84 @@
+## Register user
+# @name register
+POST http://localhost:3000/v1/auth/register
+Content-Type: application/json
+
+{
+  "name":"Anh Ba",
+  "email":"blv.tu3@gmail.com",
+  "password":"12345678x@X"
+}
+
+
+#############
+# Create user
+# @name createUser
+POST  http://localhost:3000/v1/users
+Content-Type: application/json
+Authorization: Bearer dsgdsgdsgds
+
+{
+
+  "email":"blv.tu2@gmail.com",
+  "password":"12345678x@X",
+  "name":"hoang thinh",
+  "role":"contractor"
+}
+
+##########
+# Login
+# @name login
+POST  http://localhost:3000/v1/auth/login
+Content-Type: application/json
+
+{
+
+  "email":"blv.tu2@gmail.com",
+  "password":"12345678x@X"
+}
+
+#############
+# Refresh token
+# @name refreshTokens
+POST  http://localhost:3000/v1/auth/refreshTokens
+Content-Type: application/json
+
+{
+
+  "refreshToken":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmFlMDI2YWY3NjI0MDUwNDU4OTRkN2YiLCJpYXQiOjE2NTU1NzQwMjUsImV4cCI6MTY1ODE2NjAyNX0.vvxT-q9TsDphtuqBcl0rGf3-zPZTrwoiHuFPK0qDOOo"
+}
+
+
+#############
+# Get user by id
+# @name getUser
+GET  http://localhost:3000/v1/users/62b1d8a32c2ac287404ea9d4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmFiNjcyM2U2NTU5YzU1NjE2NmE1NjgiLCJpYXQiOjE2NTU4MjI3MzcsImV4cCI6MTY1NTgyNDUzN30.y84ec15PH9hAV66v4BhrjDL6BFX_zyyI6uOqxGteq2M
+
+
+#############
+# Get all user
+# @name getUsers
+GET  http://localhost:3000/v1/users
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmFiNjcyM2U2NTU5YzU1NjE2NmE1NjgiLCJpYXQiOjE2NTU4MjU2MDksImV4cCI6MTY1NTgyNzQwOX0.OV3Lz4YSxzCdWS9-4THpWRthArUU3sfT7Wpzy06CuYI
+
+
+#############
+# Delete user
+# @name deleteUser
+DELETE   http://localhost:3000/v1/users/62b1d8a32c2ac287404ea9d4
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmFiNjcyM2U2NTU5YzU1NjE2NmE1NjgiLCJpYXQiOjE2NTU4MjI3MzcsImV4cCI6MTY1NTgyNDUzN30.y84ec15PH9hAV66v4BhrjDL6BFX_zyyI6uOqxGteq2M
+
+
+#############
+# Change user passord
+# @name change-password
+POST   http://localhost:3000/v1/auth/change-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MmIxZWM2NWVmYzYwNjJiMTAyNDZlZjEiLCJpYXQiOjE2NTU4Mjc1NTcsImV4cCI6MTY1NTgyOTM1N30.mD1mrW47CFRysw0FMnFpCPYRU9u4ZJtUqaWr1Lp1cmg
+Content-Type: application/json
+
+{
+    "password":"12345678x@"
+}
