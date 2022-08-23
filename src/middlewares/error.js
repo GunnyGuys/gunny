@@ -12,12 +12,7 @@ const errorConverter = (err, req, res, next) => {
         ? httpStatus.BAD_REQUEST
         : httpStatus.INTERNAL_SERVER_ERROR;
     const message = error.message || httpStatus[statusCode];
-    error = new ApiError(
-      statusCode,
-      message,
-      !(statusCode === httpStatus.INTERNAL_SERVER_ERROR),
-      err.stack
-    );
+    error = new ApiError(statusCode, message, false, err.stack);
   }
   next(error);
 };
