@@ -18,6 +18,9 @@ const envVarsSchema = Joi.object()
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number()
       .default(30)
       .description("days after which refresh token expire"),
+    JWT_CHANGE_PASSWORD_EXPIRATION_MINUTES: Joi.number()
+      .default(10)
+      .description("minutes after which change password token expires"),
   })
   .unknown();
 
@@ -41,11 +44,9 @@ module.exports = {
   },
   jwt: {
     secret: envVars.JWT_SECRET,
-    accessExpirationMinutes: parseInt(
-      envVars.JWT_ACCESS_EXPIRATION_MINUTES,
-      10
-    ),
-    refreshExpirationDays: parseInt(envVars.JWT_REFRESH_EXPIRATION_DAYS, 10),
-    changePasswordExpirationMinutes: 10,
+    accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES || 30,
+    refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS || 30,
+    changePasswordExpirationMinutes:
+      envVars.JWT_CHANGE_PASSWORD_EXPIRATION_MINUTES || 10,
   },
 };
