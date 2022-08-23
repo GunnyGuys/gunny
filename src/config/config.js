@@ -44,9 +44,9 @@ module.exports = {
   },
   jwt: {
     secret: envVars.JWT_SECRET,
-    accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES || 30,
-    refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS || 30,
+    accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
+    refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
     changePasswordExpirationMinutes:
-      envVars.JWT_CHANGE_PASSWORD_EXPIRATION_MINUTES || 10,
+      envVars.JWT_CHANGE_PASSWORD_EXPIRATION_MINUTES,
   },
 };
