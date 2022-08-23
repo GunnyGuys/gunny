@@ -40,7 +40,7 @@ const paginate = (schema) => {
     const skip = (page - 1) * limit;
 
     const countPromise = this.countDocuments(filters).exec();
-    const docsPromise = this.find(filters).sort(sort).skip(skip).limit(limit);
+    let docsPromise = this.find(filters).sort(sort).skip(skip).limit(limit);
 
     /**
      * format { path: param1, populate: param2 } using

@@ -3,7 +3,6 @@ const pick = require("../utils/pick");
 const ApiError = require("../utils/ApiError");
 const catchAsync = require("../utils/catchAsync");
 const { userService } = require("../services");
-const { getQueryOptions } = require("../utils/query.util");
 
 const createUser = catchAsync(async (req, res) => {
   const user = await userService.createUser(req.body);
