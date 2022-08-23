@@ -651,6 +651,7 @@ function tinhTien(messages) {
             }
             thucThu += thu;
           }
+          console.log(`Tien xac:${tienXac}`);
 
           let profit = 0;
           ///

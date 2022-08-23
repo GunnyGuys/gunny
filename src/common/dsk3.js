@@ -419,6 +419,7 @@ function parseMessage(message) {
       return output;
     }
   } catch (err) {
+    console.log(err);
     return err;
   }
 }
@@ -514,6 +515,6 @@ function clearKieu(result) {
 // Ví dụ 2: 2dai 14,15dau10ng
 // Ví dụ 3: 3dai 14,15dau 10ng
 // Vi dụ 4: 3dai 14,15,16dau10ng
-tinhTien(parseMessage("3dai 14, 15,16dau10ng"));
+tinhTien(parseMessage("angdang 13,14dd10ng"));
 
 module.exports = parseMessage;
