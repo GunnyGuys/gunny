@@ -3,6 +3,7 @@ const tokenService = require("./token.service");
 const userService = require("./user.service");
 const Token = require("../models/token.model");
 const ApiError = require("../utils/ApiError");
+const { tokenTypes } = require("../config/tokens");
 
 /**
  * Login with username and password
@@ -26,7 +27,7 @@ const loginUserWithEmailAndPassword = async (email, password) => {
 const logout = async (refreshToken) => {
   const refreshTokenDoc = await Token.findOne({
     token: refreshToken,
-    type: "refresh",
+    type: tokenTypes.REFRESH,
     blacklisted: false,
   });
   if (!refreshTokenDoc) {
@@ -44,7 +45,7 @@ const refreshAuth = async (refreshToken) => {
   try {
     const refreshTokenDoc = await tokenService.verifyToken(
       refreshToken,
-      "refresh"
+      tokenTypes.REFRESH
     );
     const user = await userService.getUserById(refreshTokenDoc.user);
     if (!user) {
@@ -67,13 +68,13 @@ const changePassword = async (changePasswordToken, newPassword) => {
   try {
     const changePasswordTokenDoc = await tokenService.verifyToken(
       changePasswordToken,
-      "changePassword"
+      tokenTypes.CHANGE_PASSWORD
     );
     const user = await userService.getUserById(changePasswordTokenDoc.user);
     if (!user) {
       throw new Error();
     }
-    await Token.deleteMany({ user: user.id, type: "changePassword" });
+    await Token.deleteMany({ user: user.id, type: tokenTypes.CHANGE_PASSWORD });
     await userService.updateUserById(user.id, { password: newPassword });
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Password reset failed");

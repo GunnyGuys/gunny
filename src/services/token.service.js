@@ -5,6 +5,7 @@ const config = require("../config/config");
 const userService = require("./user.service");
 const { Token } = require("../models");
 const ApiError = require("../utils/ApiError");
+const { tokenTypes } = require("../config/tokens");
 
 /**
  * Generate token
@@ -81,7 +82,12 @@ const generateAuthTokens = async (user) => {
     "days"
   );
   const refreshToken = generateToken(user.id, refreshTokenExpires);
-  await saveToken(refreshToken, user.id, refreshTokenExpires, "refresh");
+  await saveToken(
+    refreshToken,
+    user.id,
+    refreshTokenExpires,
+    tokenTypes.REFRESH
+  );
 
   return {
     access: {
@@ -104,7 +110,12 @@ const generateChangePasswordToken = async (email) => {
     "minutes"
   );
   const changePasswordToken = generateToken(user.id, expires);
-  await saveToken(changePasswordToken, user.id, expires, "changePassword");
+  await saveToken(
+    changePasswordToken,
+    user.id,
+    expires,
+    tokenTypes.CHANGE_PASSWORD
+  );
   return changePasswordToken;
 };
 
