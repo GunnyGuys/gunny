@@ -19,6 +19,23 @@ const loginUserWithEmailAndPassword = async (email, password) => {
 };
 
 /**
+ *
+ * @param {string} refreshToken
+ * @returns {Promise}
+ */
+const logout = async (refreshToken) => {
+  try {
+    const refreshTokenDoc = await tokenService.verifyToken(
+      refreshToken,
+      "refresh"
+    );
+    await refreshTokenDoc.remove();
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Please authenticate");
+  }
+};
+
+/**
  * Refresh auth tokens
  * @param {string} refreshToken
  * @returns {Promise<Object>}
@@ -65,6 +82,7 @@ const changePassword = async (changePasswordToken, newPassword) => {
 
 module.exports = {
   loginUserWithEmailAndPassword,
+  logout,
   refreshAuth,
   changePassword,
 };
