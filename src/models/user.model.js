@@ -42,10 +42,6 @@ const userSchema = mongoose.Schema(
       enum: roles,
       default: "contractor",
     },
-    manager: {
-      type: mongoose.SchemaTypes.ObjectId,
-      ref: "User",
-    },
   },
   {
     timestamps: true,
