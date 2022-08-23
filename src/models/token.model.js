@@ -34,6 +34,9 @@ const tokenSchema = mongoose.Schema(
   }
 );
 
+/**
+ * @typedef Token
+ */
 const Token = mongoose.model("Token", tokenSchema);
 
 module.exports = Token;

@@ -32,7 +32,24 @@ const toJSON = (schema) => {
 };
 
 const paginate = (schema) => {
-  schema.statics.paginate = async function (query, options) {
+  /**
+   * @typedef {Object} QueryResult
+   * @property {Document[]} results - Results found
+   * @property {number} page - Current page
+   * @property {number} limit - Maximum number of results per page
+   * @property {number} totalPages - Total number of pages
+   * @property {number} totalResults - Total number of documents
+   */
+  /**
+   * Query for documents with pagination
+   * @param {Object} [filter] - Mongo filter
+   * @param {Object} [options] - Query options
+   * @param {string} [options.sortBy] - Sort option in the format: sortField:(desc|asc)
+   * @param {number} [options.limit] - Maximum number of results per page (default = 10)
+   * @param {number} [options.page] - Current page (default = 1)
+   * @returns {Promise<QueryResult>}
+   */
+  schema.statics.paginate = async function (filters, options) {
     const sort = {};
     if (options.sortBy) {
       const parts = options.sortBy.split(":");
@@ -48,8 +65,8 @@ const paginate = (schema) => {
         : 1;
     const skip = (page - 1) * limit;
 
-    const countPromise = this.countDocuments(query).exec();
-    const docsPromise = this.find(query)
+    const countPromise = this.countDocuments(filters).exec();
+    const docsPromise = this.find(filters)
       .sort(sort)
       .skip(skip)
       .limit(limit)
