@@ -14,11 +14,12 @@ const { tokenTypes } = require("../config/tokens");
  * @param {string} [secret]
  * @returns {string}
  */
-const generateToken = (userId, expires, secret = config.jwt.secret) => {
+const generateToken = (userId, expires, type, secret = config.jwt.secret) => {
   const payload = {
     sub: userId, // subject
     iat: moment().unix(), // issue at
-    exp: expires.unix(), // expires at
+    exp: expires.unix(),
+    type, // expires at
   };
 
   return jwt.sign(payload, secret);
@@ -75,13 +76,21 @@ const generateAuthTokens = async (user) => {
     config.jwt.accessExpirationMinutes,
     "minutes"
   );
-  const accessToken = generateToken(user.id, accessTokenExpires);
+  const accessToken = generateToken(
+    user.id,
+    accessTokenExpires,
+    tokenTypes.ACCESS
+  );
 
   const refreshTokenExpires = moment().add(
     config.jwt.refreshExpirationDays,
     "days"
   );
-  const refreshToken = generateToken(user.id, refreshTokenExpires);
+  const refreshToken = generateToken(
+    user.id,
+    refreshTokenExpires,
+    tokenTypes.REFRESH
+  );
   await saveToken(
     refreshToken,
     user.id,
@@ -109,7 +118,11 @@ const generateChangePasswordToken = async (email) => {
     config.jwt.resetPasswordExpirationMinutes,
     "minutes"
   );
-  const changePasswordToken = generateToken(user.id, expires);
+  const changePasswordToken = generateToken(
+    user.id,
+    expires,
+    tokenTypes.CHANGE_PASSWORD
+  );
   await saveToken(
     changePasswordToken,
     user.id,
