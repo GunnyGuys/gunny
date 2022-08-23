@@ -25,6 +25,8 @@ const paginate = (schema) => {
         sortingCriteria.push((order === "desc" ? "-" : "") + key);
       });
       sort = sortingCriteria.join(" ");
+    } else {
+      sort = "createdAt";
     }
     const limit =
       options.limit && parseInt(options.limit, 10) > 0
