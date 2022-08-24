@@ -19,6 +19,42 @@ components:
         name: fake name
         role: user
 
+    Agency:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        deOrRe:
+          type: boolean
+        type:
+          type: boolean
+        syntax:
+          type: string
+        calKI:
+          type: number
+        divide:
+          type: boolean
+        northern:
+          type: string
+        central:
+          type: string
+        south:
+          type: string
+      example:
+        id: 5ebac534954b54139806c112
+        name: nguyenvanco
+        contractor: 6ebac534954b54139806c235
+        deOrRe: true
+        type: true
+        syntax: DSK
+        calKI: 0
+        divide: 0,0,0
+        northern: 75.5,75.5,66.0,66.0,75.5,75.5,66.0,66.0,66.0,75,75,650,6000,680,75,650,650,6000
+        central: 75.5,75.5,66.0,66.0,66.0,75.5,75.5,75.7,66.0,66.0,66.0,75.5,75,75,650,650,6000,750,75,75,650,650,6000,550
+        south: 75.5,75.5,66.0,66.0,66.0,75.5,75.5,75.7,66.0,66.0,66.0,75.5,75,75,650,650,6000,750,75,75,650,650,6000,550
+
     Token:
       type: object
       properties:
