@@ -21,6 +21,10 @@ const agencySchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    isAlert: {
+      type: Boolean,
+      default: true,
+    },
     syntax: {
       type: String,
       required: true,

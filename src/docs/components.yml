@@ -30,6 +30,8 @@ components:
           type: boolean
         type:
           type: boolean
+        isAlert:
+          type: boolean
         syntax:
           type: string
         calKI:
@@ -48,6 +50,7 @@ components:
         contractor: 6ebac534954b54139806c235
         deOrRe: true
         type: true
+        isAlert: true
         syntax: DSK
         calKI: 0
         divide: 0,0,0

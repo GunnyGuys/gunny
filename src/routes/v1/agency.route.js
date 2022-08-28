@@ -65,6 +65,7 @@ module.exports = router;
  *               - name
  *               - deOrRe
  *               - type
+ *               - isAlert
  *               - syntax
  *               - calKI
  *               - divide
@@ -80,6 +81,9 @@ module.exports = router;
  *               type:
  *                 type: boolean
  *                 description: Define agency type
+ *               isAlert:
+ *                 type: boolean
+ *                 description: Using for alert purpose
  *               syntax:
  *                 type: string
  *                 description: Play type
@@ -102,6 +106,7 @@ module.exports = router;
  *               name: nguyenvanco
  *               deOrRe: true
  *               type: true
+ *               isAlert: true
  *               syntax: DSK
  *               calKI: 0
  *               divide: 0,0,0
@@ -236,6 +241,9 @@ module.exports = router;
  *               type:
  *                 type: boolean
  *                 description: Define agency type
+ *               isAlert:
+ *                 type: boolean
+ *                 description: Using for alert purpose
  *               syntax:
  *                 type: string
  *                 description: Play type
@@ -258,6 +266,7 @@ module.exports = router;
  *               name: nguyenvanco
  *               deOrRe: true
  *               type: true
+ *               isAlert: true
  *               syntax: DSK
  *               calKI: 0
  *               divide: 0,0,0
