@@ -2,6 +2,7 @@ const httpStatus = require("http-status");
 const pick = require("../utils/pick");
 const ApiError = require("../utils/ApiError");
 const catchAsync = require("../utils/catchAsync");
+const { removeAscent } = require("../utils/stringUtils");
 const { agencyService } = require("../services");
 
 const createAgency = catchAsync(async (req, res) => {
@@ -19,6 +20,7 @@ const getAgencies = catchAsync(async (req, res) => {
   }
   let filters = pick(req.query, ["name"]);
   if (filters.name) {
+    filters.name = removeAscent(filters.name);
     filters.name = { $regex: ".*" + filters.name + ".*" };
   }
   filters.contractor = req.user._id;
