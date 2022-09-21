@@ -65,7 +65,6 @@ module.exports = router;
  *               - name
  *               - deOrRe
  *               - type
- *               - isAlert
  *               - syntax
  *               - calKI
  *               - divide
@@ -81,9 +80,6 @@ module.exports = router;
  *               type:
  *                 type: boolean
  *                 description: Define agency type
- *               isAlert:
- *                 type: boolean
- *                 description: Using for alert purpose
  *               syntax:
  *                 type: string
  *                 description: Play type
@@ -106,7 +102,6 @@ module.exports = router;
  *               name: nguyenvanco
  *               deOrRe: true
  *               type: true
- *               isAlert: true
  *               syntax: DSK
  *               calKI: 0
  *               divide: 0,0,0
@@ -135,16 +130,6 @@ module.exports = router;
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
- *         name: name
- *         schema:
- *           type: string
- *         description: User name
- *       - in: query
- *         name: role
- *         schema:
- *           type: string
- *         description: User role
- *       - in: query
  *         name: sortBy
  *         schema:
  *           type: string
@@ -155,7 +140,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of agencies
  *       - in: query
  *         name: page
  *         schema:
@@ -251,9 +236,6 @@ module.exports = router;
  *               type:
  *                 type: boolean
  *                 description: Define agency type
- *               isAlert:
- *                 type: boolean
- *                 description: Using for alert purpose
  *               syntax:
  *                 type: string
  *                 description: Play type
@@ -276,7 +258,6 @@ module.exports = router;
  *               name: nguyenvanco
  *               deOrRe: true
  *               type: true
- *               isAlert: true
  *               syntax: DSK
  *               calKI: 0
  *               divide: 0,0,0

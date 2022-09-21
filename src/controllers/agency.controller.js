@@ -17,11 +17,13 @@ const getAgencies = catchAsync(async (req, res) => {
   if (!req.user || !req.user._id) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Bad Request");
   }
+  let filters = pick(req.query, ["name"]);
+  if (filters.name) {
+    filters.name = { $regex: ".*" + filters.name + ".*" };
+  }
+  filters.contractor = req.user._id;
   const options = pick(req.query, ["sortBy", "limit", "page"]);
-  const agencies = await agencyService.queryAgencies(
-    { contractor: req.user._id },
-    options
-  );
+  const agencies = await agencyService.queryAgencies(filters, options);
   res.send(agencies);
 });
 

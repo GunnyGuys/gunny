@@ -6,7 +6,6 @@ const createAgency = {
     name: Joi.string().required(),
     deOrRe: Joi.boolean(),
     type: Joi.boolean(),
-    isAlert: Joi.boolean(),
     syntax: Joi.string(),
     calKI: Joi.number(),
     divide: Joi.string(),
@@ -18,7 +17,6 @@ const createAgency = {
 
 const getAgencies = {
   query: Joi.object().keys({
-    name: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -40,7 +38,6 @@ const updateAgency = {
       name: Joi.string(),
       deOrRe: Joi.boolean(),
       type: Joi.boolean(),
-      isAlert: Joi.boolean(),
       syntax: Joi.string(),
       calKI: Joi.number(),
       divide: Joi.string(),
