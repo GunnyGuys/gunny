@@ -72,6 +72,7 @@ module.exports = router;
  *               - northern
  *               - central
  *               - south
+ *               - dealerOrder
  *             properties:
  *               name:
  *                 type: string
@@ -102,6 +103,9 @@ module.exports = router;
  *               south:
  *                  type: string
  *                  description: Reward configuration
+ *               dealerOrder:
+ *                  type: array
+ *                  description: Dealer order
  *             example:
  *               name: nguyenvanco
  *               deOrRe: true
@@ -113,6 +117,7 @@ module.exports = router;
  *               northern: 75.5,75.5,66.0,66.0,75.5,75.5,66.0,66.0,66.0,75,75,650,6000,680,75,650,650,6000
  *               central: 75.5,75.5,66.0,66.0,66.0,75.5,75.5,75.7,66.0,66.0,66.0,75.5,75,75,650,650,6000,750,75,75,650,650,6000,550
  *               south: 75.5,75.5,66.0,66.0,66.0,75.5,75.5,75.7,66.0,66.0,66.0,75.5,75,75,650,650,6000,750,75,75,650,650,6000,550
+ *               dealerOrder: ["Thành Phố - Đồng Tháp - Cà Mau","Bến Tre - Vũng Tàu - Bạc Liêu","Đồng Nai - Cần Thơ - Sóc Trăng","Tây Ninh - An Giang - Bình Thuận","Vĩnh Long - Bình Dương - Trà Vinh","Thành Phố - Long An - Bình Phước - Hậu Giang","Tiền Giang - Kiên Giang - Đà Lạt"]
  *     responses:
  *       "201":
  *         description: Created
@@ -272,6 +277,9 @@ module.exports = router;
  *               south:
  *                  type: string
  *                  description: Reward configuration
+ *               dealerOrder:
+ *                  type: array
+ *                  description: Dealer order
  *             example:
  *               name: nguyenvanco
  *               deOrRe: true
@@ -283,6 +291,7 @@ module.exports = router;
  *               northern: 75.5,75.5,66.0,66.0,75.5,75.5,66.0,66.0,66.0,75,75,650,6000,680,75,650,650,6000
  *               central: 75.5,75.5,66.0,66.0,66.0,75.5,75.5,75.7,66.0,66.0,66.0,75.5,75,75,650,650,6000,750,75,75,650,650,6000,550
  *               south: 75.5,75.5,66.0,66.0,66.0,75.5,75.5,75.7,66.0,66.0,66.0,75.5,75,75,650,650,6000,750,75,75,650,650,6000,550
+ *               dealerOrder: ["Thành Phố - Đồng Tháp - Cà Mau","Bến Tre - Vũng Tàu - Bạc Liêu","Đồng Nai - Cần Thơ - Sóc Trăng","Tây Ninh - An Giang - Bình Thuận","Vĩnh Long - Bình Dương - Trà Vinh","Thành Phố - Long An - Bình Phước - Hậu Giang","Tiền Giang - Kiên Giang - Đà Lạt"]
  *     responses:
  *       "200":
  *         description: OK

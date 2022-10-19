@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const { objectId } = require("./custom.validation");
+const { objectId, dealerOrder } = require("./custom.validation");
 
 const createAgency = {
   body: Joi.object().keys({
@@ -13,6 +13,7 @@ const createAgency = {
     northern: Joi.string(),
     central: Joi.string(),
     south: Joi.string(),
+    dealerOrder: Joi.array().custom(dealerOrder),
   }),
 };
 
@@ -47,6 +48,7 @@ const updateAgency = {
       northern: Joi.string(),
       central: Joi.string(),
       south: Joi.string(),
+      dealerOrder: Joi.array().custom(dealerOrder),
     })
     .min(1),
 };

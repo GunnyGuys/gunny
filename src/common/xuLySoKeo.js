@@ -27,13 +27,57 @@ function findSoKeo(value) {
   if (left.trim().length !== right.trim().length) return "";
 
   if (isInteger(left.trim()) && isInteger(right.trim())) {
-    const lN = Number.parseInt(left.trim());
-    const rN = Number.parseInt(right.trim());
+    const leftString = left.trim();
+    const rightString = right.trim();
+    const lN = Number.parseInt(leftString);
+    const rN = Number.parseInt(rightString);
     if (lN >= rN) return "";
     let result = "";
     if (lN === 0 && rN === 99) {
       return " 00 11 22 33 44 55 66 77 88 99 ";
     }
+    // Update for case: dc 076 đến 976 xc 5n 16/10/22
+    if (leftString.length === rightString.length && rightString.length === 3) {
+      if (
+        leftString[0] !== rightString[0] &&
+        leftString[1] === rightString[1] &&
+        leftString[2] === rightString[2]
+      ) {
+        for (
+          let i = Number.parseInt(leftString[0]);
+          i <= Number.parseInt(rightString[0]);
+          i++
+        ) {
+          result += ` ${i}${leftString[1]}${leftString[2]}`;
+        }
+      } else if (
+        leftString[0] === rightString[0] &&
+        leftString[1] !== rightString[1] &&
+        leftString[2] === rightString[2]
+      ) {
+        for (
+          let i = Number.parseInt(leftString[1]);
+          i <= Number.parseInt(rightString[1]);
+          i++
+        ) {
+          result += ` ${leftString[0]}${i}${leftString[2]}`;
+        }
+      } else if (
+        leftString[0] === rightString[0] &&
+        leftString[1] === rightString[1] &&
+        leftString[2] !== rightString[2]
+      ) {
+        for (
+          let i = Number.parseInt(leftString[2]);
+          i <= Number.parseInt(rightString[2]);
+          i++
+        ) {
+          result += ` ${leftString[0]}${leftString[1]}${i}`;
+        }
+      }
+      return result + " ";
+    }
+
     for (let i = lN; i <= rN; i++) {
       result += `${i} `;
     }

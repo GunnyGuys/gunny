@@ -479,7 +479,8 @@ function clearKieu(result) {
     for (let j = 0; j < kieuTien.length; j++) {
       const kieu = kieuTien[j][KIEU].trim();
       const dai = message["dai"];
-      if (count == 1) {
+      /// Update: add condition kieu === "d" 9/10/2022 for case: dc 311 565 833 789 bao 1n d 2n
+      if (count == 1 && kieu === "d") {
         const numLen = numbers.length;
         const slDai = countDaiBefore(result, i);
         const isNhieuDai = slDai > 1 || dai === "2 dai" || dai === "3 dai";
@@ -515,6 +516,11 @@ function clearKieu(result) {
 // Ví dụ 2: 2dai 14,15dau10ng
 // Ví dụ 3: 3dai 14,15dau 10ng
 // Vi dụ 4: 3dai 14,15,16dau10ng
-tinhTien(parseMessage("angdang 13,14dd10ng"));
+
+// dc 311 565 833 bao 1n d 1n
+// 2d 12.13 đt 1n
+// dc 070 đến 079 xc 5n
+//
+tinhTien(parseMessage("dc 10k20 bỏ 13,14,15b1"));
 
 module.exports = parseMessage;

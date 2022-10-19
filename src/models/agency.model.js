@@ -59,6 +59,18 @@ const agencySchema = mongoose.Schema(
       default:
         "75.5,75.5,66.0,66.0,66.0,75.5,75.5,75.7,66.0,66.0,66.0,75.5,75,75,650,650,6000,750,75,75,650,650,6000,550",
     },
+    dealerOrder: {
+      type: Array,
+      default: [
+        "Thành Phố - Đồng Tháp - Cà Mau",
+        "Bến Tre - Vũng Tàu - Bạc Liêu",
+        "Đồng Nai - Cần Thơ - Sóc Trăng",
+        "Tây Ninh - An Giang - Bình Thuận",
+        "Vĩnh Long - Bình Dương - Trà Vinh",
+        "Thành Phố - Long An - Bình Phước - Hậu Giang",
+        "Tiền Giang - Kiên Giang - Đà Lạt",
+      ],
+    },
   },
   {
     timestamps: true,

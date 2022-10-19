@@ -19,7 +19,7 @@ const ketQuaSoXo = {
   "3 dai": ["ho chi minh", "long an", "binh phuoc"],
   "4 dai": ["ho chi minh", "long an", "binh phuoc", "hau giang"],
   "dai chinh": [
-    14, 312, 9541, 1306, 1219, 4127, 27511, 20226, 23816, 93849, 30973, 31010,
+    14, 311, 9541, 1306, 1219, 4127, 27511, 20226, 23816, 93849, 30973, 31010,
     08168, 12301, 24328, 92368, 81209, 121230,
   ],
   "ho chi minh": [
@@ -551,10 +551,16 @@ function tongSoDai(dais, kieu) {
       result.push(2);
     } else if (kieu === "bao lo" || kieu === "bao dao") {
       result.push(3);
-    } else if (kieu === "da thang") {
+    } else if (kieu === "da thang" || kieu === "da vong") {
+      //Update: 9/10/2022 for case: dc 311 565 833 bao 1n d 2n
       result.push(10);
     } else if (kieu === "da xien") {
       result.push(11);
+      if (tongD === 3) result.push(11);
+      else if (tongD === 4) {
+        result.push(11);
+        result.push(11);
+      }
     }
   }
   return result;
@@ -629,6 +635,7 @@ function tinhTien(messages) {
               // Công thức tính số cặp:
               // ((tổng số chơi) x (tổng số chơi – 1))
               case "da thang":
+              case "da vong": //Update: 9/10/2022 for case: dc 311 565 833 789 bao 1n d 2n
               case "da xien":
                 var xac = so.length * (so.length - 1) * diem * 18;
                 tienXac += xac;
@@ -698,6 +705,7 @@ function tinhTien(messages) {
               profit = thucThu - tienTrung;
               break;
             case "da thang":
+            case "da vong": /// Update: 9/10/2022 for case: dc 311 565 833 789 bao 1n d 2n
             case "da xien":
               soLanTrung = getSoLanTrungDaThang(so, countDai);
               tienTrung = diem * soLanTrung * coThuong["traThuong"][0];

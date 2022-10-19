@@ -46,6 +46,7 @@ function removeAscent(str) {
   str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
   str = str.replace(/Ì|Í|Ị|Ỉ|Ĩ/g, "i");
   str = str.replace(/đ/g, "d");
+  str = str.replace(/₫/g, "d");
   str = str.replace(/Đ/g, "d");
   str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
   str = str.replace(/Ỳ|Ý|Ỵ|Ỷ|Ỹ/g, "y");
