@@ -12,6 +12,14 @@ const createMessage = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send(message);
 });
 
+const createMessages = catchAsync(async (req, res) => {
+  if (!req.user || !req.user._id) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Bad Request");
+  }
+  const message = await messageService.createMessages(req.body, req.user._id);
+  res.status(httpStatus.CREATED).send(message);
+});
+
 const getMessages = catchAsync(async (req, res) => {
   if (!req.user || !req.user._id) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Bad Request");
@@ -64,6 +72,7 @@ const checkWin = catchAsync(async (req, res) => {
 
 module.exports = {
   createMessage,
+  createMessages,
   getMessages,
   getMessage,
   updateMessage,

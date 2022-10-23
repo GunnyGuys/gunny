@@ -20,6 +20,14 @@ router
   );
 
 router
+  .route("/import-messages")
+  .post(
+    auth("getUsers"),
+    validate(messageValidation.createMessages),
+    messageController.createMessages
+  );
+
+router
   .route("/:messageId")
   .get(
     auth("getUsers"),
@@ -370,4 +378,36 @@ module.exports = router;
  *         $ref: '#/components/responses/Forbidden'
  *       "404":
  *         $ref: '#/components/responses/NotFound'
+ */
+
+/**
+ * @swagger
+ * /messages/import-messages:
+ *   post:
+ *     summary: Create messages
+ *     description: Only contractors and admins can create other messages.
+ *     tags: [Messages]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: array
+ *             items:
+ *               type: object
+ *     responses:
+ *       "201":
+ *         description: Created
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/Message'
+ *       "400":
+ *         $ref: '#/components/responses/BadRequest'
+ *       "401":
+ *         $ref: '#/components/responses/Unauthorized'
+ *       "403":
+ *         $ref: '#/components/responses/Forbidden'
  */

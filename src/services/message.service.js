@@ -2,7 +2,7 @@ const httpStatus = require("http-status");
 const { Message, Agency } = require("../models");
 const { getLotteryResults } = require("../utils/lottery");
 const ApiError = require("../utils/ApiError");
-const moment = require("moment");
+
 /**
  * Create a message
  * @param {Object} messageBody
@@ -18,6 +18,25 @@ const createMessage = async (messageBody, userId) => {
   }
   messageBody.confirmed = false;
   return Message.create(messageBody);
+};
+
+/**
+ * Create messages
+ * @param {Object} messageBody
+ * @returns {Promise<Message>}
+ */
+const createMessages = async (messageBody, userId) => {
+  for (let i = 0; i < messageBody.length; i++) {
+    const agency = await Agency.findById(messageBody[i].agency);
+    if (!agency) {
+      throw new ApiError(httpStatus.NOT_FOUND, "Agency id is not found");
+    }
+    if (!agency.contractor.equals(userId)) {
+      throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
+    }
+    messageBody[i].confirmed = false;
+  }
+  return Message.insertMany(messageBody);
 };
 
 /**
@@ -130,6 +149,7 @@ const checkMessageById = async (messageId, userId) => {
 
 module.exports = {
   createMessage,
+  createMessages,
   queryMessages,
   getMessageById,
   updateMessageById,
