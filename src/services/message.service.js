@@ -17,6 +17,7 @@ const createMessage = async (messageBody, userId) => {
     throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
   }
   messageBody.confirmed = false;
+  messageBody.winNumbers = "";
   return Message.create(messageBody);
 };
 
@@ -35,6 +36,7 @@ const createMessages = async (messageBody, userId) => {
       throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
     }
     messageBody[i].confirmed = false;
+    messageBody.winNumbers = "";
   }
   return Message.insertMany(messageBody);
 };
