@@ -13,7 +13,7 @@ const createMessage = {
     bet: Joi.number(),
     capital: Joi.number(),
     win: Joi.boolean(),
-    winNumbers: Joi.string().required(),
+    winNumbers: Joi.string(),
     profit: Joi.number(),
     loss: Joi.number(),
   }),
@@ -32,7 +32,7 @@ const createMessages = {
       bet: Joi.number(),
       capital: Joi.number(),
       win: Joi.boolean(),
-      winNumbers: Joi.string().required(),
+      winNumbers: Joi.string(),
       profit: Joi.number(),
       loss: Joi.number(),
     })
