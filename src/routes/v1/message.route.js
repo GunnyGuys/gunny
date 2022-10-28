@@ -20,12 +20,20 @@ router
   );
 
 router
-  .route("/import-messages")
-  .post(
+  .route("/find")
+  .get(
     auth("getUsers"),
-    validate(messageValidation.createMessages),
-    messageController.createMessages
+    validate(messageValidation.findMessage),
+    messageController.findMessage
   );
+
+// router
+//   .route("/import-messages")
+//   .post(
+//     auth("getUsers"),
+//     validate(messageValidation.createMessages),
+//     messageController.createMessages
+//   );
 
 router
   .route("/:messageId")
@@ -78,60 +86,55 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
- *               - name
+ *               - date
  *               - customerName
  *               - check
+ *               - messageContent
  *               - agency
- *               - dealer
- *               - numbers
- *               - type
- *               - bet
- *               - capital
- *               - win
- *               - winNumbers
+ *               - messages
  *               - profit
  *               - loss
  *             properties:
- *               name:
+ *               date:
  *                 type: string
  *               customerName:
  *                 type: string
  *                 description: Define agency name
  *               check:
  *                 type: number
+ *               messageContent:
+ *                 type: string
+ *                 description: Content of Message
  *               agency:
  *                 type: string
  *                 description: AgencyId of message
- *               dealer:
- *                 type: string
- *               numbers:
- *                 type: string
- *               type:
- *                  type: string
- *               bet:
- *                  type: number
- *               capital:
- *                  type: number
- *               win:
- *                  type: boolean
- *               winNumbers:
- *                  type: string
+ *               messages:
+ *                 type: array
+ *                 items:
+ *                    $ref: '#/components/schemas/SubMessage'
  *               profit:
  *                  type: number
  *               loss:
  *                  type: number
  *             example:
- *               name: Tin1
- *               customerName: nguyenvanco
+ *               date: 12/06/2022
+ *               customerName: Long
  *               check: 0
- *               agency: 630990d8ff507a87c891f78d
- *               dealer: dc
- *               numbers: 02 03 04
- *               type: dt
- *               bet: 0
- *               capital: 0
- *               win: false
- *               winNumbers: 02 03
+ *               messageContent: Tp 136d150d250
+ *               agency: 6353abcd1a6635341f2d3768
+ *               messages:
+ *                - name: Tin0
+ *                  dealer: Ho Chi Minh
+ *                  numbers: 14 15
+ *                  type: dau
+ *                  bet: 10
+ *                  capital: 40
+ *                - name: Tin2
+ *                  dealer: 2 dai
+ *                  numbers: 15 16
+ *                  type: dau
+ *                  bet: 10
+ *                  capital: 40
  *               profit: 0
  *               loss: 0
  *     responses:
@@ -195,7 +198,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/Messages'
+ *                     $ref: '#/components/schemas/Message'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -264,30 +267,23 @@ module.exports = router;
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               date:
  *                 type: string
  *               customerName:
  *                 type: string
  *                 description: Define agency name
  *               check:
  *                 type: number
+ *               messageContent:
+ *                 type: string
+ *                 description: Content of Message
  *               agency:
  *                 type: string
  *                 description: AgencyId of message
- *               dealer:
- *                 type: string
- *               numbers:
- *                 type: string
- *               type:
- *                  type: string
- *               bet:
- *                  type: number
- *               capital:
- *                  type: number
- *               win:
- *                  type: boolean
- *               winNumbers:
- *                  type: string
+ *               messages:
+ *                 type: array
+ *                 items:
+ *                    $ref: '#/components/schemas/SubMessage'
  *               profit:
  *                  type: number
  *               loss:
@@ -295,17 +291,28 @@ module.exports = router;
  *               confirmed:
  *                  type: boolean
  *             example:
- *               name: Tin1
- *               customerName: nguyenvanco
+ *               date: 12/06/2022
+ *               customerName: Long
  *               check: 0
- *               agency: 630990d8ff507a87c891f78d
- *               dealer: dc
- *               numbers: 02 03 04
- *               type: dt
- *               bet: 0
- *               capital: 0
- *               win: false
- *               winNumbers: 02 03
+ *               messageContent: Tp 136d150d250
+ *               agency: 6353abcd1a6635341f2d3768
+ *               messages:
+ *                - name: Tin0
+ *                  dealer: Ho Chi Minh
+ *                  numbers: 14 15
+ *                  type: dau
+ *                  bet: 10
+ *                  win: true
+ *                  capital: 40
+ *                  winNumbers: 12 13
+ *                - name: Tin2
+ *                  dealer: 2 dai
+ *                  numbers: 15 16
+ *                  type: dau
+ *                  bet: 10
+ *                  capital: 40
+ *                  win: false
+ *                  winNumbers: 12 13
  *               profit: 0
  *               loss: 0
  *               confirmed: false
@@ -380,32 +387,77 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  */
 
+// /**
+//  * @swagger
+//  * /messages/import-messages:
+//  *   post:
+//  *     summary: Create messages
+//  *     description: Only contractors and admins can create other messages.
+//  *     tags: [Messages]
+//  *     security:
+//  *       - bearerAuth: []
+//  *     requestBody:
+//  *       required: true
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: array
+//  *             items:
+//  *               type: object
+//  *     responses:
+//  *       "201":
+//  *         description: Created
+//  *         content:
+//  *           application/json:
+//  *             schema:
+//  *                $ref: '#/components/schemas/Message'
+//  *       "400":
+//  *         $ref: '#/components/responses/BadRequest'
+//  *       "401":
+//  *         $ref: '#/components/responses/Unauthorized'
+//  *       "403":
+//  *         $ref: '#/components/responses/Forbidden'
+//  */
+
 /**
  * @swagger
- * /messages/import-messages:
- *   post:
- *     summary: Create messages
- *     description: Only contractors and admins can create other messages.
+ * /messages/find:
+ *   get:
+ *     summary: Filter messages are between start date and end date
+ *     description: Only contractors and admins can retrieve all messages.
  *     tags: [Messages]
  *     security:
  *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: array
- *             items:
- *               type: object
+ *     parameters:
+ *       - in: query
+ *         name: agency
+ *         schema:
+ *           type: string
+ *         description: AgencyId if message
+ *       - in: query
+ *         name: start
+ *         schema:
+ *           type: number
+ *         description: Start date as timestamp
+ *         example: 1666976400000
+ *       - in: query
+ *         name: end
+ *         schema:
+ *           type: number
+ *         description: End date as timestamp
+ *         example: 1667062740000
  *     responses:
- *       "201":
- *         description: Created
+ *       "200":
+ *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/Message'
- *       "400":
- *         $ref: '#/components/responses/BadRequest'
+ *               type: object
+ *               properties:
+ *                 results:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Message'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
