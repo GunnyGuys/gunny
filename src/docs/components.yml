@@ -58,6 +58,98 @@ components:
         central: 75.5,75.5,66.0,66.0,66.0,75.5,75.5,75.7,66.0,66.0,66.0,75.5,75,75,650,650,6000,750,75,75,650,650,6000,550
         south: 75.5,75.5,66.0,66.0,66.0,75.5,75.5,75.7,66.0,66.0,66.0,75.5,75,75,650,650,6000,750,75,75,650,650,6000,550
 
+    SubMessage:
+      type: object
+      properties:
+        name:
+          type: string
+        dealer:
+          type: string
+        numbers:
+          type: string
+        type:
+          type: string
+        bet:
+          type: number
+        capital:
+          type: number
+        win:
+          type: boolean
+        winNumbers:
+          type: string
+      example:
+        name: Tin1
+        dealer: Ho Chi Minh
+        numbers: 14 15
+        type: dau
+        bet: 10
+        capital: 40
+        win: false
+        winNumbers: 12 12
+
+    Message:
+      type: object
+      properties:
+        date:
+          type: string
+        customerName:
+          type: string
+        messageContent:
+          type: string
+        agency:
+          type: string
+        messages:
+          type: array
+          items: object
+          properties:
+            name:
+              type: string
+            dealer:
+              type: string
+            numbers:
+              type: string
+            type:
+              type: string
+            bet:
+              type: number
+            capital:
+              type: number
+            win:
+              type: boolean
+            winNumbers:
+              type: boolean
+        profit:
+          type: number
+        loss:
+          type: number
+        confirmed:
+          type: boolean
+      example:
+        date: 12/06/2022
+        customerName: Long
+        messageContent: 136d150d250
+        agency: 6351856043051e630ceee873
+        messages:
+        - name: Tin0
+          dealer: Ho Chi Minh
+          numbers: 14 15
+          type: dau
+          bet: 10
+          capital: 40
+          win: false
+          winNumbers: 12 12
+        - name: Tin1
+          dealer: 2 dai
+          numbers: 14 15
+          type: dau
+          bet: 10
+          capital: 40
+          win: false
+          winNumbers: 12 12
+        profit: 0
+        loss: 0
+        confirmed: false
+
     Token:
       type: object
       properties:

@@ -17,7 +17,6 @@ const createMessage = async (messageBody, userId) => {
     throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
   }
   messageBody.confirmed = false;
-  messageBody.winNumbers = "";
   return Message.create(messageBody);
 };
 
@@ -78,6 +77,29 @@ const getMessageById = async (id, userId) => {
     throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
   }
   return message;
+};
+
+/**
+ * Find message from start to end
+ * @param {Number} start
+ * @param {Number} end
+ * @returns {Promise<QueryResult>}
+ */
+const filterMessage = async (agencyId, start, end, userId) => {
+  const agency = await Agency.findById(agencyId);
+  if (!agency) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Agency id is not found");
+  }
+  if (!agency.contractor.equals(userId)) {
+    throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
+  }
+
+  var startDate = new Date(start);
+  var endDate = new Date(end);
+  const messages = await Message.find({
+    createdAt: { $gte: startDate, $lt: endDate },
+  });
+  return messages;
 };
 
 /**
@@ -154,6 +176,7 @@ module.exports = {
   createMessages,
   queryMessages,
   getMessageById,
+  filterMessage,
   updateMessageById,
   deleteMessageById,
   checkMessageById,

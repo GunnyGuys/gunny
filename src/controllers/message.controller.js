@@ -45,6 +45,19 @@ const getMessage = catchAsync(async (req, res) => {
   res.send(message);
 });
 
+const findMessage = catchAsync(async (req, res) => {
+  if (!req.user || !req.user._id) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Bad Request");
+  }
+  const message = await messageService.filterMessage(
+    req.query.agency,
+    req.query.start,
+    req.query.end,
+    req.user._id
+  );
+  res.send(message);
+});
+
 const updateMessage = catchAsync(async (req, res) => {
   const message = await messageService.updateMessageById(
     req.params.messageId,
@@ -75,6 +88,7 @@ module.exports = {
   createMessages,
   getMessages,
   getMessage,
+  findMessage,
   updateMessage,
   deleteMessage,
   checkWin,
