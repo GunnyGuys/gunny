@@ -91,7 +91,6 @@ module.exports = router;
  *               - check
  *               - messageContent
  *               - agency
- *               - messages
  *               - profit
  *               - loss
  *             properties:
@@ -120,21 +119,8 @@ module.exports = router;
  *               date: 12/06/2022
  *               customerName: Long
  *               check: 0
- *               messageContent: Tp 136d150d250
+ *               messageContent: Tp,cm 95,60d10
  *               agency: 6353abcd1a6635341f2d3768
- *               messages:
- *                - name: Tin0
- *                  dealer: Ho Chi Minh
- *                  numbers: 14 15
- *                  type: dau
- *                  bet: 10
- *                  capital: 40
- *                - name: Tin2
- *                  dealer: 2 dai
- *                  numbers: 15 16
- *                  type: dau
- *                  bet: 10
- *                  capital: 40
  *               profit: 0
  *               loss: 0
  *     responses:
@@ -280,10 +266,6 @@ module.exports = router;
  *               agency:
  *                 type: string
  *                 description: AgencyId of message
- *               messages:
- *                 type: array
- *                 items:
- *                    $ref: '#/components/schemas/SubMessage'
  *               profit:
  *                  type: number
  *               loss:
@@ -294,28 +276,10 @@ module.exports = router;
  *               date: 12/06/2022
  *               customerName: Long
  *               check: 0
- *               messageContent: Tp 136d150d250
+ *               messageContent: Tp,cm 95,60d10
  *               agency: 6353abcd1a6635341f2d3768
- *               messages:
- *                - name: Tin0
- *                  dealer: Ho Chi Minh
- *                  numbers: 14 15
- *                  type: dau
- *                  bet: 10
- *                  win: true
- *                  capital: 40
- *                  winNumbers: 12 13
- *                - name: Tin2
- *                  dealer: 2 dai
- *                  numbers: 15 16
- *                  type: dau
- *                  bet: 10
- *                  capital: 40
- *                  win: false
- *                  winNumbers: 12 13
  *               profit: 0
  *               loss: 0
- *               confirmed: false
  *     responses:
  *       "200":
  *         description: OK
@@ -386,38 +350,6 @@ module.exports = router;
  *       "404":
  *         $ref: '#/components/responses/NotFound'
  */
-
-// /**
-//  * @swagger
-//  * /messages/import-messages:
-//  *   post:
-//  *     summary: Create messages
-//  *     description: Only contractors and admins can create other messages.
-//  *     tags: [Messages]
-//  *     security:
-//  *       - bearerAuth: []
-//  *     requestBody:
-//  *       required: true
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: array
-//  *             items:
-//  *               type: object
-//  *     responses:
-//  *       "201":
-//  *         description: Created
-//  *         content:
-//  *           application/json:
-//  *             schema:
-//  *                $ref: '#/components/schemas/Message'
-//  *       "400":
-//  *         $ref: '#/components/responses/BadRequest'
-//  *       "401":
-//  *         $ref: '#/components/responses/Unauthorized'
-//  *       "403":
-//  *         $ref: '#/components/responses/Forbidden'
-//  */
 
 /**
  * @swagger

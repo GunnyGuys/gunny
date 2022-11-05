@@ -61,31 +61,40 @@ components:
     SubMessage:
       type: object
       properties:
-        name:
+        tin:
           type: string
-        dealer:
+        dai:
+          type: array
+        so:
           type: string
-        numbers:
+        kieu:
           type: string
-        type:
-          type: string
-        bet:
+        tien:
           type: number
-        capital:
+        donVi:
           type: number
-        win:
+        xac:
+          type: number
+        loi:
+          type: number
+        lo:
+          type: number
+        trung:
           type: boolean
-        winNumbers:
+        soTrung:
           type: string
       example:
-        name: Tin1
-        dealer: Ho Chi Minh
-        numbers: 14 15
-        type: dau
-        bet: 10
-        capital: 40
-        win: false
-        winNumbers: 12 12
+        tin: Tin1
+        dai: ["ho chi minh","ca mau"]
+        so: 95 60
+        kieu: da thang
+        tien: 10
+        donvi: 1000
+        xac: 0
+        loi: 0
+        lo: 0
+        trung: false
+        soTrung: 12 12
 
     Message:
       type: object
@@ -102,21 +111,23 @@ components:
           type: array
           items: object
           properties:
-            name:
+            tin:
               type: string
-            dealer:
+            dai:
+              type: array
+            so:
               type: string
-            numbers:
+            kieu:
               type: string
-            type:
-              type: string
-            bet:
+            tien:
               type: number
-            capital:
+            donVi:
               type: number
-            win:
+            xac:
+              type: number
+            trung:
               type: boolean
-            winNumbers:
+            soTrung:
               type: boolean
         profit:
           type: number
@@ -127,25 +138,20 @@ components:
       example:
         date: 12/06/2022
         customerName: Long
-        messageContent: 136d150d250
+        messageContent: Tp,cm 95,60
         agency: 6351856043051e630ceee873
         messages:
-        - name: Tin0
-          dealer: Ho Chi Minh
-          numbers: 14 15
-          type: dau
-          bet: 10
-          capital: 40
-          win: false
-          winNumbers: 12 12
-        - name: Tin1
-          dealer: 2 dai
-          numbers: 14 15
-          type: dau
-          bet: 10
-          capital: 40
-          win: false
-          winNumbers: 12 12
+        - tin: Tin1
+          dai: ["ho chi minh","ca mau"]
+          so: 95 60
+          kieu: da thang
+          tien: 10
+          donVi: 1000
+          xac: 0
+          loi: 0
+          lo: 0
+          trung: false
+          soTrung: 12 12
         profit: 0
         loss: 0
         confirmed: false

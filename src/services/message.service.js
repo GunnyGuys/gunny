@@ -1,6 +1,9 @@
 const httpStatus = require("http-status");
 const { Message, Agency } = require("../models");
 const { getLotteryResults } = require("../utils/lottery");
+const tinhLoLai = require("../common/tinhLoLai");
+const tryParseMessage = require("../common/dsk3");
+const dinhDangKetQuaXoSo = require("../common/xuLyKetQuaSoXo");
 const ApiError = require("../utils/ApiError");
 
 /**
@@ -16,7 +19,18 @@ const createMessage = async (messageBody, userId) => {
   if (!agency.contractor.equals(userId)) {
     throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
   }
+  try {
+    const messages = tryParseMessage(messageBody.messageContent);
+    messageBody.messages = messages;
+  } catch {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Tin nhắn không hợp lệ. Vui lòng coi kỹ lại"
+    );
+  }
   messageBody.confirmed = false;
+  messageBody.profit = 0;
+  messageBody.loss = 0;
   return Message.create(messageBody);
 };
 
@@ -109,10 +123,49 @@ const filterMessage = async (agencyId, start, end, userId) => {
  * @returns {Promise<Message>}
  */
 const updateMessageById = async (messageId, userId, updateBody) => {
-  const message = await getMessageById(messageId, userId);
-  Object.assign(message, updateBody);
-  await message.save();
-  return message;
+  try {
+    const message = await getMessageById(messageId, userId);
+    if (message.confirmed) {
+      return message;
+    }
+
+    const now = new Date();
+    const d = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate(),
+      16,
+      25,
+      0,
+      0,
+      0
+    );
+
+    if (
+      message.createdAt.getFullYear() === now.getFullYear() &&
+      message.createdAt.getMonth() === now.getMonth() &&
+      message.createdAt.getDate() === now.getDate()
+    ) {
+      var difference = (d - message.createdAt) / (1000 * 60); // minutes
+      if (difference > 0) {
+        throw new ApiError(
+          httpStatus.FORBIDDEN,
+          "Không thể cập nhật tin nhắn. Đã qua giờ xổ"
+        );
+      }
+    }
+
+    const messages = tryParseMessage(updateBody.messageContent);
+    updateBody.messages = messages;
+    Object.assign(message, updateBody);
+    await message.save();
+    return message;
+  } catch {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Tin nhắn không hợp lệ. Vui lòng coi kỹ lại"
+    );
+  }
 };
 
 /**
@@ -156,7 +209,8 @@ const checkMessageById = async (messageId, userId) => {
     message.createdAt.getMonth() === now.getMonth() &&
     message.createdAt.getDate() === now.getDate()
   ) {
-    if (message.createdAt < d) {
+    var difference = (d - message.createdAt) / (1000 * 60); // minutes
+    if (difference <= 0) {
       throw new ApiError(httpStatus.ACCEPTED, "Please waiting until draw time");
     }
   }
@@ -166,7 +220,19 @@ const checkMessageById = async (messageId, userId) => {
   if (result["ket_qua"]) {
     const kq = result["ket_qua"];
     const agency = await Agency.findById(message.agency);
-    const dealerOrder = agency.dealerOrder;
+    var index =
+      message.createdAt.getDay() === 0 ? 6 : message.createdAt.getDay() - 1;
+    var order = agency.dealerOrder[index].replace(/Thành Phố/g, "TP.HCM");
+    const dealerOrder = order.split(" - ");
+    const ketQuaSoXo = [];
+    for (let k = 0; k < dealerOrder.length; k++) {
+      ketQuaSoXo.push(result["ket_qua"].find((x) => x[dealerOrder[k]]));
+    }
+    const newMessages = tinhLoLai(
+      message,
+      dinhDangKetQuaXoSo(ketQuaSoXo, dealerOrder)
+    );
+    await newMessages.save();
   }
   return message;
 };

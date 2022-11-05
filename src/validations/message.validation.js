@@ -3,12 +3,12 @@ const { objectId } = require("./custom.validation");
 
 const subMesasage = Joi.array().items(
   Joi.object().keys({
-    name: Joi.string(),
-    dealer: Joi.string().required(),
-    numbers: Joi.string().required(),
-    type: Joi.string().required(),
-    bet: Joi.number(),
-    capital: Joi.number(),
+    tin: Joi.string(),
+    dai: Joi.array(),
+    so: Joi.string(),
+    kieu: Joi.string(),
+    tien: Joi.number(),
+    donVi: Joi.number(),
   })
 );
 
@@ -19,7 +19,6 @@ const createMessage = {
     check: Joi.number(),
     messageContent: Joi.string().required(),
     agency: Joi.string().custom(objectId),
-    messages: subMesasage,
     profit: Joi.number(),
     loss: Joi.number(),
   }),
@@ -67,6 +66,34 @@ const findMessage = {
   }),
 };
 
+// const updateMessage = {
+//   params: Joi.object().keys({
+//     messageId: Joi.required().custom(objectId),
+//   }),
+//   body: Joi.object()
+//     .keys({
+//       date: Joi.string(),
+//       customerName: Joi.string().required(),
+//       check: Joi.number(),
+//       messageContent: Joi.string().required(),
+//       agency: Joi.string().custom(objectId),
+//       messages: Joi.array().items(
+//         Joi.object().keys({
+//           tin: Joi.string(),
+//           dai: Joi.array(),
+//           so: Joi.string(),
+//           kieu: Joi.string(),
+//           tien: Joi.number(),
+//           donVi: Joi.number(),
+//         })
+//       ),
+//       profit: Joi.number(),
+//       loss: Joi.number(),
+//       confirmed: Joi.boolean(),
+//     })
+//     .min(1),
+// };
+
 const updateMessage = {
   params: Joi.object().keys({
     messageId: Joi.required().custom(objectId),
@@ -78,21 +105,8 @@ const updateMessage = {
       check: Joi.number(),
       messageContent: Joi.string().required(),
       agency: Joi.string().custom(objectId),
-      messages: Joi.array().items(
-        Joi.object().keys({
-          name: Joi.string(),
-          dealer: Joi.string().required(),
-          numbers: Joi.string().required(),
-          type: Joi.string().required(),
-          bet: Joi.number(),
-          capital: Joi.number(),
-          win: Joi.boolean(),
-          winNumbers: Joi.string(),
-        })
-      ),
       profit: Joi.number(),
       loss: Joi.number(),
-      confirmed: Joi.boolean(),
     })
     .min(1),
 };

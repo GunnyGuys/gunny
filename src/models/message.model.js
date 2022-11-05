@@ -1,40 +1,40 @@
 const mongoose = require("mongoose");
 const { toJSON, paginate } = require("./plugins");
 
-const subMessageSchema = mongoose.Schema({
-  name: {
-    type: String,
-    trim: true,
-  },
-  dealer: {
-    type: String,
-    trim: true,
-  },
-  numbers: {
-    type: String,
-    trim: true,
-  },
-  type: {
-    type: String,
-    trim: true,
-  },
-  bet: {
-    type: Number,
-    default: 0,
-  },
-  capital: {
-    type: Number,
-    default: 0,
-  },
-  win: {
-    type: Boolean,
-    default: false,
-  },
-  winNumbers: {
-    type: String,
-    trim: true,
-  },
-});
+// const subMessageSchema = mongoose.Schema({
+//   name: {
+//     type: String,
+//     trim: true,
+//   },
+//   dealer: {
+//     type: String,
+//     trim: true,
+//   },
+//   numbers: {
+//     type: String,
+//     trim: true,
+//   },
+//   type: {
+//     type: String,
+//     trim: true,
+//   },
+//   bet: {
+//     type: Number,
+//     default: 0,
+//   },
+//   capital: {
+//     type: Number,
+//     default: 0,
+//   },
+//   win: {
+//     type: Boolean,
+//     default: false,
+//   },
+//   winNumbers: {
+//     type: String,
+//     trim: true,
+//   },
+// });
 
 const messageSchema = mongoose.Schema(
   {
@@ -64,37 +64,50 @@ const messageSchema = mongoose.Schema(
     },
     messages: [
       {
-        name: {
+        tin: {
           type: String,
           trim: true,
         },
-        dealer: {
+        dai: {
+          type: Array,
+          default: [],
+        },
+        so: {
           type: String,
           trim: true,
         },
-        numbers: {
+        kieu: {
           type: String,
           trim: true,
         },
-        type: {
+        tien: {
           type: String,
           trim: true,
         },
-        bet: {
+        donVi: {
+          type: Number,
+          default: 1000,
+        },
+        xac: {
           type: Number,
           default: 0,
         },
-        capital: {
+        loi: {
           type: Number,
           default: 0,
         },
-        win: {
+        lo: {
+          type: Number,
+          default: 0,
+        },
+        trung: {
           type: Boolean,
           default: false,
         },
-        winNumbers: {
+        soTrung: {
           type: String,
           trim: true,
+          default: "",
         },
       },
     ],
@@ -124,6 +137,6 @@ messageSchema.plugin(paginate);
  * @typedef Message
  */
 const Message = mongoose.model("Message", messageSchema);
-const SubMessage = mongoose.model("SubMessage", subMessageSchema);
+// const SubMessage = mongoose.model("SubMessage", subMessageSchema);
 
 module.exports = Message;

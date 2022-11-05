@@ -79,6 +79,26 @@ const sunday = [
   "Đà Lạt - Kiên Giang - Tiền Giang",
 ];
 
+const dealerUnsingedMap = {
+  "Đồng Tháp": "dong thap",
+  "Cà Mau": "ca mau",
+  "Bến Tre ": "ben tre",
+  "Vũng Tàu": "vung tau",
+  "Bạc Liêu": "bac lieu",
+  "Đồng Nai": "dong nai",
+  "Cần Thơ": "can tho",
+  "Sóc Trăng": "soc trang",
+  "Tây Ninh": "tay ninh",
+  "An Giang": "an giang",
+  "Bình Thuận": "binh thuan",
+  "Vĩnh Long": "vinh long",
+  "Bình Dương": "binh duong",
+  "Trà Vinh": "tra vinh",
+  "Long An": "long an",
+  "Bình Phước": "binh phuoc",
+  "Hậu Giang": "hau giang",
+  "TP.HCM": "ho chi minh",
+};
 module.exports = {
   monday,
   tuesday,
@@ -87,4 +107,5 @@ module.exports = {
   friday,
   saturday,
   sunday,
+  dealerUnsingedMap,
 };

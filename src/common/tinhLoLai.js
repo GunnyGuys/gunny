@@ -1,48 +1,10 @@
-//  cò đầu đuôi 2 con là 0.76
-// 	cò đầu đuôi 3 con là 0.65
-// 	cò các trường hợp khác là 0.7
-
 const { dai } = require("./config");
-
-//  thưởng đầu đuôi 2 con là 75 lần
-// 	thưởng đầu đuôi 3 con là 85 lần
-// 	thưởng các trường hợp khác là 680 lần
-
-const thuongDD2 = 75;
-const thuongDD3 = 85;
-const thuongOther = 680;
+const ApiError = require("../utils/ApiError");
+const httpStatus = require("http-status");
 
 /// tiền xác = tong so danh x (cach danh x diem)
 /// thầu nhận = tiền xác x he so (0.76, 0.75, 0.7)
-const ketQuaSoXo = {
-  "2 dai": ["ho chi minh", "long an"],
-  "3 dai": ["ho chi minh", "long an", "binh phuoc"],
-  "4 dai": ["ho chi minh", "long an", "binh phuoc", "hau giang"],
-  "dai chinh": [
-    14, 311, 9541, 1306, 1219, 4127, 27511, 20226, 23816, 93849, 30973, 31010,
-    08168, 12301, 24328, 92368, 81209, 121230,
-  ],
-  "ho chi minh": [
-    14, 321, 9541, 1306, 1203, 4156, 27551, 20226, 23810, 93849, 30973, 31013,
-    08168, 12300, 24328, 92368, 81210, 1221131,
-  ],
-  "long an": [
-    14, 147, 1512, 2876, 4887, 0360, 12901, 69062, 67460, 66996, 16178, 84310,
-    88562, 73050, 65126, 58427, 56781, 9448131,
-  ],
-  "binh phuoc": [
-    15, 707, 4191, 2351, 8657, 3112, 62381, 69342, 04442, 45864, 53278, 36681,
-    03305, 80469, 80713, 83438, 90112, 8563151,
-  ],
-  "hau giang": [
-    56, 067, 3742, 6748, 9552, 0335, 70690, 64094, 71910, 40274, 92594, 03305,
-    50234, 25576, 69631, 09237, 56638, 700610,
-  ],
-  "vinh long": [
-    08, 067, 3742, 6748, 9552, 0335, 70690, 64094, 71910, 40274, 92594, 03305,
-    50234, 25576, 69631, 09237, 56638, 700608,
-  ],
-};
+var ketQuaSoXo = {};
 
 const permutationLength = (n) => {
   let result = 1;
@@ -124,6 +86,7 @@ function getTiLeCoThuong(so, kieu) {
 
 function getSoLanTrungDau(so, dais) {
   let d = 0;
+  const soTrung = [];
   if (
     dais.includes("2 dai") ||
     dais.includes("3 dai") ||
@@ -141,19 +104,27 @@ function getSoLanTrungDau(so, dais) {
 
   for (let index = 0; index < dais.length; index++) {
     const kq = ketQuaSoXo[dais[index]];
+    if (!kq) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "Đài đánh không xổ trong ngày đã đánh"
+      );
+    }
     for (let i = 0; i < so.length; i++) {
       const s = so[i];
       if (`${kq[s.length - 2]}`.padStart(s.length, "0").includes(s)) {
         d++;
+        soTrung.push(s);
       }
     }
   }
 
-  return d;
+  return { soLanTrung: d, soTrung: soTrung.join(" ") };
 }
 
 function getSoLanTrungDuoi(so, dais) {
   let d = 0;
+  const soTrung = [];
   if (
     dais.includes("2 dai") ||
     dais.includes("3 dai") ||
@@ -171,20 +142,28 @@ function getSoLanTrungDuoi(so, dais) {
 
   for (let index = 0; index < dais.length; index++) {
     const kq = ketQuaSoXo[dais[index]];
+    if (!kq) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "Đài đánh không xổ trong ngày đã đánh"
+      );
+    }
     for (let i = 0; i < so.length; i++) {
       const s = so[i];
       const last = `${kq[kq.length - 1]}`;
       if (last.substring(last.length - s.length, last.length).includes(s)) {
         d++;
+        soTrung.push(s);
       }
     }
   }
 
-  return d;
+  return { soLanTrung: d, soTrung: soTrung.join(" ") };
 }
 
 function getSoLanTrungBaoBayLo(so, dais) {
   let d = 0;
+  const soTrung = [];
   if (
     dais.includes("2 dai") ||
     dais.includes("3 dai") ||
@@ -202,6 +181,12 @@ function getSoLanTrungBaoBayLo(so, dais) {
 
   for (let index = 0; index < dais.length; index++) {
     const kq = ketQuaSoXo[dais[index]];
+    if (!kq) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "Đài đánh không xổ trong ngày đã đánh"
+      );
+    }
     for (let i = 0; i < so.length; i++) {
       const s = so[i];
       const arr =
@@ -212,16 +197,18 @@ function getSoLanTrungBaoBayLo(so, dais) {
           match.substring(match.length - s.length, match.length).includes(s)
         ) {
           d++;
+          soTrung.push(s);
         }
       }
     }
   }
 
-  return d;
+  return { soLanTrung: d, soTrung: soTrung.join(" ") };
 }
 
 function getSoLanTrungBaoLo(so, dais) {
   let d = 0;
+  const soTrung = [];
   if (
     dais.includes("2 dai") ||
     dais.includes("3 dai") ||
@@ -239,6 +226,12 @@ function getSoLanTrungBaoLo(so, dais) {
 
   for (let index = 0; index < dais.length; index++) {
     const kq = ketQuaSoXo[dais[index]];
+    if (!kq) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "Đài đánh không xổ trong ngày đã đánh"
+      );
+    }
     for (let i = 0; i < so.length; i++) {
       const s = so[i];
       for (let j = s.length === 2 ? 0 : s.length === 3 ? 1 : 2; j < 18; j++) {
@@ -247,16 +240,18 @@ function getSoLanTrungBaoLo(so, dais) {
           match.substring(match.length - s.length, match.length).includes(s)
         ) {
           d++;
+          soTrung.push(s);
         }
       }
     }
   }
 
-  return d;
+  return { soLanTrung: d, soTrung: soTrung.join(" ") };
 }
 
 function getSoLanTrungBaoDao(so, dais) {
   let d = 0;
+  const soTrung = [];
   if (
     dais.includes("2 dai") ||
     dais.includes("3 dai") ||
@@ -274,6 +269,12 @@ function getSoLanTrungBaoDao(so, dais) {
 
   for (let index = 0; index < dais.length; index++) {
     const kq = ketQuaSoXo[dais[index]];
+    if (!kq) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "Đài đánh không xổ trong ngày đã đánh"
+      );
+    }
     for (let i = 0; i < so.length; i++) {
       const permutationArr = stringPermutations(so[i]);
       for (let k = 0; k < permutationArr.length; k++) {
@@ -284,17 +285,19 @@ function getSoLanTrungBaoDao(so, dais) {
             match.substring(match.length - s.length, match.length).includes(s)
           ) {
             d++;
+            soTrung.push(s);
           }
         }
       }
     }
   }
 
-  return d;
+  return { soLanTrung: d, soTrung: soTrung.join(" ") };
 }
 
 function getSoLanTrungDaThang(so, dais) {
   let count = 0;
+  const soTrung = [];
   const result = [];
   if (
     dais.includes("2 dai") ||
@@ -313,6 +316,12 @@ function getSoLanTrungDaThang(so, dais) {
 
   for (let index = 0; index < dais.length; index++) {
     const kq = ketQuaSoXo[dais[index]];
+    if (!kq) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "Đài đánh không xổ trong ngày đã đánh"
+      );
+    }
     for (let i = 0; i < so.length; i++) {
       let d = 0;
       const s = so[i];
@@ -322,6 +331,7 @@ function getSoLanTrungDaThang(so, dais) {
           match.substring(match.length - s.length, match.length).includes(s)
         ) {
           d++;
+          soTrung.push(s);
         }
       }
       result[i] = (result[i] ? result[i] : 0) + d;
@@ -340,12 +350,12 @@ function getSoLanTrungDaThang(so, dais) {
     }
   }
 
-  return count;
+  return { soLanTrung: count, soTrung: soTrung.join(" ") };
 }
 
 function getSoLanTrungDaoXiuDau(so, dais) {
   let d = 0;
-
+  const soTrung = [];
   if (
     dais.includes("2 dai") ||
     dais.includes("3 dai") ||
@@ -363,6 +373,12 @@ function getSoLanTrungDaoXiuDau(so, dais) {
 
   for (let index = 0; index < dais.length; index++) {
     const kq = ketQuaSoXo[dais[index]];
+    if (!kq) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "Đài đánh không xổ trong ngày đã đánh"
+      );
+    }
     for (let i = 0; i < so.length; i++) {
       const s = so[i];
       const permutationArr = stringPermutations(s);
@@ -376,17 +392,18 @@ function getSoLanTrungDaoXiuDau(so, dais) {
             .includes(item)
         ) {
           d++;
+          soTrung.push(s);
         }
       }
     }
   }
 
-  return d;
+  return { soLanTrung: d, soTrung: soTrung.join(" ") };
 }
 
 function getSoLanTrungDaoXiuDuoi(so, dais) {
   let d = 0;
-
+  const soTrung = [];
   if (
     dais.includes("2 dai") ||
     dais.includes("3 dai") ||
@@ -404,6 +421,12 @@ function getSoLanTrungDaoXiuDuoi(so, dais) {
 
   for (let index = 0; index < dais.length; index++) {
     const kq = ketQuaSoXo[dais[index]];
+    if (!kq) {
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        "Đài đánh không xổ trong ngày đã đánh"
+      );
+    }
     for (let i = 0; i < so.length; i++) {
       const s = so[i];
       const permutationArr = stringPermutations(s);
@@ -417,111 +440,17 @@ function getSoLanTrungDaoXiuDuoi(so, dais) {
             .includes(item)
         ) {
           d++;
+          soTrung.push(s);
         }
       }
     }
   }
 
-  return d;
-}
-
-function isTrungDau(so, dais) {
-  if (dais.includes("2 dai") || dais.includes("3 dai")) {
-    dais = ketQuaSoXo[dais.includes("2 dai") ? "2 dai" : "3 dai"];
-  }
-
-  for (let index = 0; index < dais.length; index++) {
-    const kq = ketQuaSoXo[dais[index]];
-    for (let i = 0; i < so.length; i++) {
-      const s = so[i];
-      if (`${kq[s.length - 2]}`.padStart(s.length, "0").includes(s)) {
-        return true;
-      }
-    }
-  }
-
-  return false;
-}
-
-function isTrungDuoi(so, dais) {
-  if (dais.includes("2 dai") || dais.includes("3 dai")) {
-    dais = ketQuaSoXo[dais.includes("2 dai") ? "2 dai" : "3 dai"];
-  }
-
-  for (let index = 0; index < dais.length; index++) {
-    const kq = ketQuaSoXo[dais[index]];
-    for (let i = 0; i < so.length; i++) {
-      const s = so[i];
-      const last = `${kq[kq.length - 1]}`;
-      if (last.substring(last.length - s.length, last.length).includes(s)) {
-        return true;
-      }
-    }
-  }
-
-  return false;
-}
-
-function isTrungDaThang(so, dai) {
-  const kq = ketQuaSoXo[dai];
-  const n1 = so[0];
-  const n2 = so[1];
-  const l = n1.length;
-
-  let d1 = kq.some((element) => {
-    const e = `${element}`;
-    const el = e.length;
-    return e.substring(el - l, el).includes(n1);
-  });
-  let d2 = kq.some((element) => {
-    const e = `${element}`;
-    const el = e.length;
-    return e.substring(el - l, el).includes(n2);
-  });
-  return d1 && d2;
-}
-
-function isTrungBaoLo(so, dai) {
-  const kq = ketQuaSoXo[dai];
-  for (let i = 0; i < so.length; i++) {
-    const num = so[i];
-    const numLen = num.length;
-    const index = numLen === 2 ? 0 : 1;
-    for (let j = index; j < kq.length; j++) {
-      let row = `${kq[j]}`.padStart(numLen, "0");
-      if (row.substring(row.length - numLen, row.length).includes(num)) {
-        return true;
-      }
-    }
-  }
-  return false;
+  return { soLanTrung: d, soTrung: soTrung.join(" ") };
 }
 
 function getSo(value) {
   return value.split(" ");
-}
-
-function getDonVi(value) {
-  if (["nghin", "ngan", "ng", "n"].includes(value)) {
-    return 1000;
-  } else {
-    return 1000000;
-  }
-}
-
-function countDaiBefore(item, curIndex) {
-  const rp = [];
-  rp.push(item["dai"]);
-  curIndex--;
-  while (curIndex >= 0) {
-    const dai = item["dai"];
-    const so = item["so"];
-    const kieuTien = item["kieuTien"];
-    if (!(so === "" && kieuTien.length === 0)) return rp;
-    rp.push(dai);
-    curIndex--;
-  }
-  return rp;
 }
 
 function tongSoDai(dais, kieu) {
@@ -566,188 +495,11 @@ function tongSoDai(dais, kieu) {
   return result;
 }
 
-function tinhTien(messages) {
-  for (let i = 0; i < messages.length; i++) {
+function tinhLoLai(message, ketQua) {
+  ketQuaSoXo = ketQua;
+  for (let i = 0; i < message.messages.length; i++) {
     // Tin thứ i
-    const message = messages[i];
-    for (let j = 0; j < message.length; j++) {
-      const item = message[j];
-      const dai = item["dai"];
-      const so = getSo(item["so"]);
-      const kieuTien = item["kieuTien"];
-      if (so !== "" && kieuTien.length > 0) {
-        const countDai = countDaiBefore(item, j);
-        for (let k = 0; k < kieuTien.length; k++) {
-          const kt = kieuTien[k];
-          const kieu = kt["kieu"];
-          const donvi = getDonVi(kt["x"]);
-          const diem = (kt["tien"] * donvi) / 1000;
-
-          const coThuong = getTiLeCoThuong(so, kieu);
-
-          /// Dau/Duoi/DauDuoi: Tiền Xác = số chơi x điểm chơi x số lần dò
-          const soCachDo = tongSoDai(countDai, kieu);
-          let tienXac = 0;
-          let thucThu = 0;
-          for (let i = 0; i < soCachDo.length; i++) {
-            let thu = 0;
-            /// Dau/Duoi/DauDuoi: Thực Thu = tiền xác x tỉ lệ cò
-            switch (kieu) {
-              case "dau":
-              case "xiu dau":
-              case "duoi":
-              case "xiu duoi":
-                var xac = so.length * diem;
-                tienXac += xac;
-                thu += (xac * coThuong["co"][0]) / 100;
-                break;
-              case "dau duoi":
-              case "xiu chu":
-                var xac = so.length * diem;
-                tienXac += xac;
-                thu += (xac * coThuong["co"][soCachDo[i]]) / 100;
-                break;
-              case "bao bay lo":
-                var xac = so.length * diem * 7;
-                tienXac += xac;
-                thu += (xac * coThuong["co"][0]) / 100;
-                break;
-              case "bao lo":
-                var xac =
-                  so.length *
-                  diem *
-                  (so[0].length === 2 ? 18 : so[0].length === 3 ? 17 : 16);
-                tienXac += xac;
-                thu += (xac * coThuong["co"][0]) / 100;
-                break;
-              case "bao dao":
-                var xac =
-                  so.length *
-                  permutationLength(so[0].length) *
-                  diem *
-                  (so[0].length === 2 ? 18 : so[0].length === 3 ? 17 : 16);
-                tienXac += xac;
-                thu += (xac * coThuong["co"][0]) / 100;
-                break;
-              // Tiền Xác = số cặp (có phân biệt thứ tự) x điểm chơi x số lần dò
-              // Thực Thu = tiền xác x tỉ lệ cò
-              // Tiền Trúng = điểm x số lần trúng x tỉ lệ thưởng
-              // Lời/Lỗ = Thực Thu – Tiền trúng
-              // Công thức tính số cặp:
-              // ((tổng số chơi) x (tổng số chơi – 1))
-              case "da thang":
-              case "da vong": //Update: 9/10/2022 for case: dc 311 565 833 789 bao 1n d 2n
-              case "da xien":
-                var xac = so.length * (so.length - 1) * diem * 18;
-                tienXac += xac;
-                thu += (xac * coThuong["co"][0]) / 100;
-                break;
-              case "dao xiu dau":
-              case "dao xiu duoi":
-              case "dao dac biet":
-                var xac = so.length * permutationLength(so[0].length) * diem;
-                tienXac += xac;
-                thu += (xac * coThuong["co"][0]) / 100;
-                break;
-              case "dao xiu dau duoi":
-                var xac = so.length * permutationLength(so[0].length) * diem;
-                tienXac += xac;
-                thu += (xac * coThuong["co"][soCachDo[i]]) / 100;
-                break;
-              default:
-                break;
-            }
-            thucThu += thu;
-          }
-          console.log(`Tien xac:${tienXac}`);
-
-          let profit = 0;
-          ///
-          /// dau/duoi/dauduoi: Tiền Trúng = điểm x số lần trúng x tỉ lệ thưởng
-          let tienTrung = 0;
-          let soLanTrung = 0;
-          switch (kieu) {
-            case "dau":
-            case "xiu dau":
-              soLanTrung = getSoLanTrungDau(so, countDai);
-              tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
-              profit = thucThu - tienTrung;
-              break;
-            case "duoi":
-            case "xiu duoi":
-              soLanTrung = getSoLanTrungDuoi(so, countDai);
-              tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
-              profit = thucThu - tienTrung;
-              break;
-            case "dau duoi":
-            case "xiu chu":
-              tienTrung =
-                diem *
-                  getSoLanTrungDau(so, countDai) *
-                  coThuong["traThuong"][0] +
-                diem *
-                  getSoLanTrungDuoi(so, countDai) *
-                  coThuong["traThuong"][1];
-              profit = thucThu - tienTrung;
-              break;
-            case "bao bay lo":
-              soLanTrung = getSoLanTrungBaoBayLo(so, countDai);
-              tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
-              profit = thucThu - tienTrung;
-              break;
-            case "bao lo":
-              soLanTrung = getSoLanTrungBaoLo(so, countDai);
-              tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
-              profit = thucThu - tienTrung;
-              break;
-            case "bao dao":
-              soLanTrung = getSoLanTrungBaoDao(so, countDai);
-              tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
-              profit = thucThu - tienTrung;
-              break;
-            case "da thang":
-            case "da vong": /// Update: 9/10/2022 for case: dc 311 565 833 789 bao 1n d 2n
-            case "da xien":
-              soLanTrung = getSoLanTrungDaThang(so, countDai);
-              tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
-              profit = thucThu - tienTrung;
-              break;
-            case "dao xiu dau":
-              soLanTrung = getSoLanTrungDaoXiuDau(so, countDai);
-              tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
-              profit = thucThu - tienTrung;
-              break;
-            case "dao xiu duoi":
-            case "dao dac biet":
-              soLanTrung = getSoLanTrungDaoXiuDuoi(so, countDai);
-              tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
-              profit = thucThu - tienTrung;
-              break;
-            case "dao xiu dau duoi":
-              tienTrung =
-                diem *
-                  getSoLanTrungDaoXiuDau(so, countDai) *
-                  coThuong["traThuong"][0] +
-                diem *
-                  getSoLanTrungDaoXiuDuoi(so, countDai) *
-                  coThuong["traThuong"][1];
-              profit = thucThu - tienTrung;
-              break;
-            default:
-              break;
-          }
-          console.log(profit);
-          console.log("\n");
-        }
-      }
-    }
-  }
-}
-
-function tinhLoLai(messages) {
-  for (let i = 0; i < messages.length; i++) {
-    // Tin thứ i
-    const item = messages[i];
+    const item = message.messages[i];
     const so = getSo(item["so"]);
     const countDai = item["dai"];
     const kieu = item["kieu"];
@@ -830,23 +582,25 @@ function tinhLoLai(messages) {
       }
       thucThu += thu;
     }
-    console.log(`Tien xac:${tienXac}`);
+
+    message.messages[i].xac = tienXac;
 
     let profit = 0;
     ///
     /// dau/duoi/dauduoi: Tiền Trúng = điểm x số lần trúng x tỉ lệ thưởng
-    let tienTrung = 0;
-    let soLanTrung = 0;
+    var tienTrung = 0;
+    var soLanTrung = 0;
+    var soTrung = "";
     switch (kieu) {
       case "dau":
       case "xiu dau":
-        soLanTrung = getSoLanTrungDau(so, countDai);
+        ({ soLanTrung, soTrung } = getSoLanTrungDau(so, countDai));
         tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
         profit = thucThu - tienTrung;
         break;
       case "duoi":
       case "xiu duoi":
-        soLanTrung = getSoLanTrungDuoi(so, countDai);
+        ({ soLanTrung, soTrung } = getSoLanTrungDuoi(so, countDai));
         tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
         profit = thucThu - tienTrung;
         break;
@@ -858,35 +612,35 @@ function tinhLoLai(messages) {
         profit = thucThu - tienTrung;
         break;
       case "bao bay lo":
-        soLanTrung = getSoLanTrungBaoBayLo(so, countDai);
+        ({ soLanTrung, soTrung } = getSoLanTrungBaoBayLo(so, countDai));
         tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
         profit = thucThu - tienTrung;
         break;
       case "bao lo":
-        soLanTrung = getSoLanTrungBaoLo(so, countDai);
+        ({ soLanTrung, soTrung } = getSoLanTrungBaoLo(so, countDai));
         tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
         profit = thucThu - tienTrung;
         break;
       case "bao dao":
-        soLanTrung = getSoLanTrungBaoDao(so, countDai);
+        ({ soLanTrung, soTrung } = getSoLanTrungBaoDao(so, countDai));
         tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
         profit = thucThu - tienTrung;
         break;
       case "da thang":
       case "da vong": /// Update: 9/10/2022 for case: dc 311 565 833 789 bao 1n d 2n
       case "da xien":
-        soLanTrung = getSoLanTrungDaThang(so, countDai);
+        ({ soLanTrung, soTrung } = getSoLanTrungDaThang(so, countDai));
         tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
         profit = thucThu - tienTrung;
         break;
       case "dao xiu dau":
-        soLanTrung = getSoLanTrungDaoXiuDau(so, countDai);
+        ({ soLanTrung, soTrung } = getSoLanTrungDaoXiuDau(so, countDai));
         tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
         profit = thucThu - tienTrung;
         break;
       case "dao xiu duoi":
       case "dao dac biet":
-        soLanTrung = getSoLanTrungDaoXiuDuoi(so, countDai);
+        ({ soLanTrung, soTrung } = getSoLanTrungDaoXiuDuoi(so, countDai));
         tienTrung = diem * soLanTrung * coThuong["traThuong"][0];
         profit = thucThu - tienTrung;
         break;
@@ -903,13 +657,18 @@ function tinhLoLai(messages) {
       default:
         break;
     }
-    console.log(profit);
-    console.log("\n");
+    item.loi = profit;
+    message.profit += profit;
+    if (soLanTrung !== 0) {
+      item.trung = true;
+      item.soTrung = soTrung;
+      item.lo = profit;
+    }
   }
+  message.confirmed = true;
+  return message;
 }
-module.exports = {
-  tinhTien,
-  tinhLoLai,
-};
+
+module.exports = tinhLoLai;
 
 /// tien xac = tong so * diem * so cach do

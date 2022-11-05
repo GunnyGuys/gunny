@@ -26,7 +26,7 @@ const xuLyMultiMessage = require("./xuLyMultiMessage");
 
 const xuLyKieuA = require("./xuLyKieuA");
 const updateType = require("./getExplicitType");
-const tinhTien = require("./tinhTienDSK2");
+const { tinhTien, tinhLoLai } = require("./tinhTienDSK2");
 
 const ALIAS = "alias";
 const RESULT = "result";
@@ -424,6 +424,57 @@ function parseMessage(message) {
   }
 }
 
+function timTongDai(item, curIndex) {
+  const rp = [];
+  rp.push(item[curIndex]["dai"]);
+  curIndex--;
+  while (curIndex >= 0) {
+    const dai = item[curIndex]["dai"];
+    const so = item[curIndex]["so"];
+    const kieuTien = item[curIndex]["kieuTien"];
+    if (!(so === "" && kieuTien.length === 0)) return rp;
+    rp.unshift(dai);
+    curIndex--;
+  }
+  return rp;
+}
+
+function getDonVi(value) {
+  if (["nghin", "ngan", "ng", "n"].includes(value)) {
+    return 1000;
+  } else {
+    return 1000000;
+  }
+}
+
+function findListMessageModel(messages) {
+  const messageList = [];
+  for (let i = 0; i < messages.length; i++) {
+    // Tin thứ i
+    const message = messages[i];
+    for (let j = 0; j < message.length; j++) {
+      var item = message[j];
+      const so = item["so"];
+      const kieuTien = item["kieuTien"];
+      if (so !== "" && kieuTien.length > 0) {
+        //
+        for (let k = 0; k < kieuTien.length; k++) {
+          const kt = kieuTien[k];
+          var m = {};
+          m["tin"] = `Tin${i + 1}`;
+          m["dai"] = timTongDai(message, j);
+          m["so"] = so;
+          m["kieu"] = kt["kieu"];
+          m["tien"] = Number.parseFloat(kt["tien"]);
+          m["donVi"] = getDonVi(kt["x"]);
+          messageList.push(m);
+        }
+      }
+    }
+  }
+  return messageList;
+}
+
 function isChuc(number) {
   return number[number.length - 1] === "0";
 }
@@ -521,6 +572,10 @@ function clearKieu(result) {
 // 2d 12.13 đt 1n
 // dc 070 đến 079 xc 5n
 //
-tinhTien(parseMessage("dc 10k20 bỏ 13,14,15b1"));
 
-module.exports = parseMessage;
+// tinhLoLai(findListMessageModel(parseMessage(t15)));
+
+function tryParseMessage(message) {
+  return findListMessageModel(parseMessage(message));
+}
+module.exports = tryParseMessage;
