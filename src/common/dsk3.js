@@ -440,7 +440,7 @@ function timTongDai(item, curIndex) {
 }
 
 function getDonVi(value) {
-  if (["nghin", "ngan", "ng", "n"].includes(value)) {
+  if (["nghin", "ngan", "ng", "n"].includes(value.trim())) {
     return 1000;
   } else {
     return 1000000;
