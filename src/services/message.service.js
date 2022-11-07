@@ -19,6 +19,18 @@ const createMessage = async (messageBody, userId) => {
   if (!agency.contractor.equals(userId)) {
     throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
   }
+
+  const messages = await Message.find({
+    date: messageBody.date,
+    messageContent: messageBody.messageContent,
+    customerName: messageBody.customerName,
+    agency: messageBody.agency,
+  });
+
+  if (messages && messages.length > 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "This message already exist!");
+  }
+
   try {
     const messages = tryParseMessage(messageBody.messageContent);
     messageBody.messages = messages;
@@ -31,7 +43,37 @@ const createMessage = async (messageBody, userId) => {
   messageBody.confirmed = false;
   messageBody.profit = 0;
   messageBody.loss = 0;
-  return Message.create(messageBody);
+
+  var message = await Message.create(messageBody);
+  let dealer = "mien-trung";
+  if (messageBody.check === 0) {
+    dealer = "mien-nam";
+  } else if (messageBody.check === 2) {
+    dealer = "mien-bac";
+  }
+
+  const messageDate = new Date(messageBody.date);
+
+  const result = await getLotteryResults(dealer, messageDate);
+
+  /// Start check
+  if (result && result["ket_qua"]) {
+    const kq = result["ket_qua"];
+    var index = messageDate.getDay() === 0 ? 6 : messageDate.getDay() - 1;
+    var order = agency.dealerOrder[index].replace(/Thành Phố/g, "TP.HCM");
+    const dealerOrder = order.split(" - ");
+    const ketQuaSoXo = [];
+    for (let k = 0; k < dealerOrder.length; k++) {
+      ketQuaSoXo.push(result["ket_qua"].find((x) => x[dealerOrder[k]]));
+    }
+    const newMessages = tinhLoLai(
+      message,
+      dinhDangKetQuaXoSo(ketQuaSoXo, dealerOrder)
+    );
+    message = await newMessages.save();
+  }
+
+  return message;
 };
 
 /**
@@ -95,11 +137,10 @@ const getMessageById = async (id, userId) => {
 
 /**
  * Find message from start to end
- * @param {Number} start
- * @param {Number} end
+ * @param {Object} date
  * @returns {Promise<QueryResult>}
  */
-const filterMessage = async (agencyId, start, end, userId) => {
+const filterMessage = async (agencyId, date, userId) => {
   const agency = await Agency.findById(agencyId);
   if (!agency) {
     throw new ApiError(httpStatus.NOT_FOUND, "Agency id is not found");
@@ -108,11 +149,15 @@ const filterMessage = async (agencyId, start, end, userId) => {
     throw new ApiError(httpStatus.FORBIDDEN, "Forbidden");
   }
 
-  var startDate = new Date(start);
-  var endDate = new Date(end);
+  // var startDate = new Date(start);
+  // var endDate = new Date(end);
+  // const messages = await Message.find({
+  //   createdAt: { $gte: startDate, $lt: endDate },
+  // });
   const messages = await Message.find({
-    createdAt: { $gte: startDate, $lt: endDate },
+    date: { $eq: date },
   });
+
   return messages;
 };
 

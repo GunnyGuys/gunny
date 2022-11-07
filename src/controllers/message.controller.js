@@ -51,8 +51,7 @@ const findMessage = catchAsync(async (req, res) => {
   }
   const message = await messageService.filterMessage(
     req.query.agency,
-    req.query.start,
-    req.query.end,
+    req.query.date,
     req.user._id
   );
   res.send(message);

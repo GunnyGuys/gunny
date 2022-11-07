@@ -355,7 +355,7 @@ module.exports = router;
  * @swagger
  * /messages/find:
  *   get:
- *     summary: Filter messages are between start date and end date
+ *     summary: Filter messages by date
  *     description: Only contractors and admins can retrieve all messages.
  *     tags: [Messages]
  *     security:
@@ -367,17 +367,11 @@ module.exports = router;
  *           type: string
  *         description: AgencyId if message
  *       - in: query
- *         name: start
+ *         name: date
  *         schema:
- *           type: number
- *         description: Start date as timestamp
- *         example: 1666976400000
- *       - in: query
- *         name: end
- *         schema:
- *           type: number
- *         description: End date as timestamp
- *         example: 1667062740000
+ *           type: string
+ *         description: Date must have format MM/dd/YYY
+ *         example: 11/07/2022
  *     responses:
  *       "200":
  *         description: OK

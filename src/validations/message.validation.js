@@ -61,8 +61,7 @@ const getMessage = {
 const findMessage = {
   query: Joi.object().keys({
     agency: Joi.string().custom(objectId),
-    start: Joi.number().integer().required(),
-    end: Joi.number().integer().required(),
+    date: Joi.string().required(),
   }),
 };
 

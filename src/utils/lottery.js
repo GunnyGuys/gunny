@@ -206,7 +206,7 @@ const getLotteryResults = async (dealer, date) =>
             resolve(resultFinal);
           }
         } else {
-          reject(error);
+          reject(undefined);
         }
       }
     )
