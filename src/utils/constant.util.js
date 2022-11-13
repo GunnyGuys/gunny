@@ -98,6 +98,9 @@ const dealerUnsingedMap = {
   "Bình Phước": "binh phuoc",
   "Hậu Giang": "hau giang",
   "TP.HCM": "ho chi minh",
+  "Tiền Giang": "tien giang",
+  "Kiên Giang": "kien giang",
+  "Đà Lạt": "da lat",
 };
 module.exports = {
   monday,
