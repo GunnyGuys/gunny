@@ -119,6 +119,10 @@ const messageSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    summary: {
+      type: Array,
+      default: ["", "", "", "", "", "", "", "", "", ""],
+    },
     confirmed: {
       type: Boolean,
       default: false,

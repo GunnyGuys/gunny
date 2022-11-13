@@ -116,7 +116,7 @@ module.exports = router;
  *               loss:
  *                  type: number
  *             example:
- *               date: 12/06/2022
+ *               date: 11/07/2022
  *               customerName: Long
  *               check: 0
  *               messageContent: Tp,cm 95,60d10
@@ -273,7 +273,7 @@ module.exports = router;
  *               confirmed:
  *                  type: boolean
  *             example:
- *               date: 12/06/2022
+ *               date: 11/07/2022
  *               customerName: Long
  *               check: 0
  *               messageContent: Tp,cm 95,60d10

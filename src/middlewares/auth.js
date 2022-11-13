@@ -12,7 +12,18 @@ const verifyCallback =
     }
 
     req.user = user;
-
+    if (user.expiredAt) {
+      const expireDate = new Date(user.expiredAt);
+      const now = new Date();
+      if (expireDate < now) {
+        return reject(
+          new ApiError(
+            httpStatus.UNAUTHORIZED,
+            "Account is expired. Please renew!"
+          )
+        );
+      }
+    }
     if (requiredRights.length) {
       const userRights = roleRights.get(user.role);
       const hasRequiredRights = requiredRights.every((right) =>

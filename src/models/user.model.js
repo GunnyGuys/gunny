@@ -42,6 +42,10 @@ const userSchema = mongoose.Schema(
       enum: roles,
       default: "contractor",
     },
+    expiredAt: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,

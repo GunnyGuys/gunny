@@ -133,6 +133,8 @@ components:
           type: number
         loss:
           type: number
+        summary:
+          type: array
         confirmed:
           type: boolean
       example:
@@ -154,6 +156,7 @@ components:
           soTrung: 12 12
         profit: 0
         loss: 0
+        summary: ["99@99","99@99","99@99","99@99","99@99","99@99","99@99","99@99","99@99","99@99"]
         confirmed: false
 
     Token:

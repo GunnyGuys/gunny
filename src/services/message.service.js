@@ -2,6 +2,7 @@ const httpStatus = require("http-status");
 const { Message, Agency } = require("../models");
 const { getLotteryResults } = require("../utils/lottery");
 const tinhLoLai = require("../common/tinhLoLai");
+const tinhTongLoLai = require("../utils/tinhTongLoLai");
 const tryParseMessage = require("../common/dsk3");
 const dinhDangKetQuaXoSo = require("../common/xuLyKetQuaSoXo");
 const ApiError = require("../utils/ApiError");
@@ -70,6 +71,8 @@ const createMessage = async (messageBody, userId) => {
       message,
       dinhDangKetQuaXoSo(ketQuaSoXo, dealerOrder)
     );
+    const summary = tinhTongLoLai(newMessages.messages);
+    newMessages.summary = summary;
     message = await newMessages.save();
   }
 
@@ -277,6 +280,8 @@ const checkMessageById = async (messageId, userId) => {
       message,
       dinhDangKetQuaXoSo(ketQuaSoXo, dealerOrder)
     );
+    const summary = tinhTongLoLai(newMessages.messages);
+    newMessages.summary = summary;
     await newMessages.save();
   }
   return message;

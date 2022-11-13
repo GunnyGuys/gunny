@@ -402,7 +402,6 @@ function handleMessage(message) {
 function parseMessage(message) {
   const output = [];
   try {
-    console.log(`ORIGINAL MESSAGE: ${message}\n`);
     message = normalizeMessage(message);
     const multiMessage = xuLyMultiMessage(message);
     for (let i = 0; i < multiMessage.length; i++) {
@@ -419,7 +418,6 @@ function parseMessage(message) {
       return output;
     }
   } catch (err) {
-    console.log(err);
     return err;
   }
 }
