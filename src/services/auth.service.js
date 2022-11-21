@@ -16,6 +16,19 @@ const loginUserWithEmailAndPassword = async (email, password) => {
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Incorrect email or password");
   }
+  if (user.expiredAt) {
+    const expireDate = new Date(user.expiredAt);
+    const now = new Date();
+    if (expireDate < now) {
+      return reject(
+        new ApiError(
+          httpStatus.UNAUTHORIZED,
+          "Account is expired. Please renew!"
+        )
+      );
+    }
+  }
+
   return user;
 };
 
